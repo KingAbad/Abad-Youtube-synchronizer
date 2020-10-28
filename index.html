@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Abad's first app</title>
+    <title>WorkShop_IOT_SOCIALMEDIA</title>
 
     <!-- Bootstrap core CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
@@ -31,7 +30,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Abad's Youtube synchronizer</a>
+          <a class="navbar-brand" href="#">Social Media IoT Workshop PXL</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -39,10 +38,16 @@
             <li><a href="#too">Button2</a></li>
             <li><a href="#phree">Button3</a></li>
           </ul>
+		  	
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-
+	
+	 <div class="container">
+			Video ID: <input type="text" name="fname" value="tGiJSnwBwDQ" id="name_input"/>
+			<button onclick="onYouTubeIframeAPIReady()">Go</button>
+			</div><p id="demo"></p>
+			
     <div class="container">
 	
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
@@ -52,9 +57,9 @@
 			<button id="playVideo" type="button" class="btn btn-default">
 			<span class="glyphicon glyphicon-play"></span></button>
 			<button id="pauseVideo" type="button" class="btn btn-default">
-			<span class="glyphicon glyphicon-pause"</span></button>
+			<span class="glyphicon glyphicon-pause"></span></button>
 		</div>
-	<div id='progressBar' style ="width:600px; height:35px; margin-left:10px; float:left;">
+	<div id="progressBar" style ="width:600px; height:35px; margin-left:10px; float:left;">
 		<div id ="line" style="border-style:solid; top:50%; position:relative; border-width:1px;"></div>
 		<div id ="square" style="height:15px; width:15px; position:relative; border-width:2px; border-style:solid; top:8.5px; left:0%;"></div>
 	</div>
@@ -73,22 +78,23 @@
 		function initBtns(){
 			var playVideoBtn = $('#playVideo');
 			var pauseVideoBtn = $('#pauseVideo');
-			playVideoBtn.click(function(playVideo){
+			playVideoBtn.click(function(event){
 				mydata = {state: 'play', time: player.getCurrentTime()};
 				socket.emit('event', mydata);
 				});
 				
-				pauseVideoBtn.click(function(pauseVideo){
+				pauseVideoBtn.click(function(event){
 				mydata = {state: 'pause', time: player.getCurrentTime()};
 				socket.emit('event',mydata);
 				});				
 		}
 
 		function progressBarLoop(){
-			var progressBar = $('.progressBar');
+			var progressBar = $('#progressBar');
 			var progressSquare = $('#square');
 			var videoLength = player.getDuration();
-			progressBar.click(function(event){					
+
+			progressBar.click(function(event){		    
 				var divOffset = $(this).offset();
 				var seekTo = (event.pageX - divOffset.left)/600*videoLength;
 				var mydata = {state: 'play', time: seekTo}
@@ -143,14 +149,16 @@
       // 5. The API calls this function when the player's state changes.
       //    The function indicates that when playing a video (state=1),
       //    the player should play for six seconds and then stop.
-      var done = true;
+      var done = false;
       function onPlayerStateChange(event) {
+	  var text = document.getElementById("name_input").value; 
 		console.log(event.data);
 		console.log(event.target.getCurrentTime());
         if (event.data == YT.PlayerState.PLAYING && !done) {
           setTimeout(stopVideo, 60000);
           done = true;
         }
+	
       }
       function playVideo() {
         player.playVideo();
